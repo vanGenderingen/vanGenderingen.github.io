@@ -1,0 +1,7 @@
+{
+ "versie": 1,
+ "kdf": "PBKDF2-SHA256",
+ "iteraties": 600000,
+ "zout": "Ay2s8+M//7t0OoPDGtz8zw==",
+ "controle": "SEsxKI351Csw97hmv9TXUNn0vRQ68pgTXdh3KxEBZQ9hi8M="
+}
