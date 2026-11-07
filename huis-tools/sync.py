@@ -116,8 +116,15 @@ def push(bericht):
         return "niets"
     git("-c", "user.name=%s" % (git("config", "user.name", check=False).stdout.strip() or "Huis sync"),
         "commit", "-qm", bericht)
-    r = git("push", "-q", "origin", TAK, check=False)
-    return "ok" if r.returncode == 0 else "afgewezen"
+    r = git("-c", "http.postBuffer=524288000", "push", "-q", "origin", TAK, check=False)   # grote eerste push over HTTPS
+    if r.returncode == 0:
+        return "ok"
+    fout = (r.stderr or r.stdout).strip()
+    zeg("Push mislukte:\n  " + fout.replace("\n", "\n  "))
+    # alleen opnieuw proberen als iemand anders tussendoor pushte; andere fouten hebben geen zin om te herhalen
+    if "rejected" in fout or "fetch first" in fout or "non-fast-forward" in fout:
+        return "afgewezen"
+    stop("Pushen naar GitHub lukte niet (zie hierboven).")
 
 
 # ---------- init en wachtwoord ----------
