@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ons huis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #f4f1ec; --paper: #fbf9f5; --ink: #2b2a27; --muted: #7a756c; --line: #e2ddd3; --soft: #ebe5da;
+    --accent: #5e6b4a; --accent-ink: #fbf9f5; --warn: #9a5b2c; --warn-bg: #f6e9dc;
+    --serif: "Fraunces", Georgia, serif; --sans: "Inter", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1d1c1a; --paper: #252421; --ink: #ece7de; --muted: #9d968a; --line: #3a3833; --soft: #302e2a;
+      --accent: #a3b388; --accent-ink: #1d1c1a; --warn: #e2a774; --warn-bg: #3a2c20;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; font: 15px/1.5 var(--sans); background: var(--bg); color: var(--ink);
+         display: grid; place-items: center; padding: 24px 16px; }
+  main { width: 100%; max-width: 420px; }
+  h1 { font-family: var(--serif); font-weight: 560; font-size: 30px; letter-spacing: -0.015em; margin: 0 0 4px; }
+  p { margin: 0; }
+  .muted { color: var(--muted); }
+  .kaart { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin-top: 20px; }
+  .kaart[hidden], [hidden] { display: none !important; }
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  input { width: 100%; font: inherit; color: inherit; padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); }
+  input:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button { font: inherit; cursor: pointer; }
+  .btn { display: block; width: 100%; margin-top: 12px; padding: 11px 14px; border-radius: 9px; border: 1px solid var(--accent);
+         background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .btn:disabled { opacity: .55; cursor: default; }
+  .fout { margin-top: 10px; padding: 9px 11px; border-radius: 9px; background: var(--warn-bg); color: var(--warn); font-size: 13px; }
+  nav { display: grid; gap: 10px; }
+  nav a { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; text-decoration: none; color: inherit;
+          padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+  nav a:hover { border-color: var(--accent); }
+  nav b { display: block; font-family: var(--serif); font-weight: 560; font-size: 18px; }
+  nav small { color: var(--muted); font-size: 13px; }
+  nav svg { width: 44px; height: 44px; color: var(--accent); }
+  nav .pijl { color: var(--muted); font-size: 18px; }
+  .voet { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 13px; }
+  .stil { border: 0; background: none; color: var(--muted); padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
+  .stil:hover { color: var(--ink); }
+  code { font-size: 12.5px; background: var(--soft); padding: 1px 5px; border-radius: 5px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ons huis</h1>
+  <p class="muted" id="sub">Het 3D-model en de meubels, versleuteld bewaard.</p>
+
+  <form class="kaart" id="slot" hidden>
+    <label for="wachtwoord">Wachtwoord</label>
+    <input id="wachtwoord" type="password" autocomplete="current-password" required autofocus>
+    <div class="fout" id="fout" hidden></div>
+    <button class="btn" id="open">Openen</button>
+    <p class="muted" style="font-size:13px;margin-top:12px">Dit apparaat onthoudt de sleutel tot je op <b>Vergrendelen</b> klikt (dat wist ook het GitHub-token van de importer).</p>
+  </form>
+
+  <div class="kaart" id="menu" hidden>
+    <nav>
+      <a href="model/">
+        <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 21 22 9l15 12"/><path d="M11 18v17h22V18"/><path d="M19 35v-9h6v9"/></svg>
+        <span><b>Het huis</b><small>Rondkijken, inrichten, verven, ontwerpen</small></span><span class="pijl">→</span>
+      </a>
+      <a href="importeer/">
+        <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 24v-6a4 4 0 0 1 4-4h18a4 4 0 0 1 4 4v6"/><path d="M7 24h30v6H7z"/><path d="M10 30v4M34 30v4"/></svg>
+        <span><b>Meubels importeren</b><small>Webshoplink of eigen 3D-bestand</small></span><span class="pijl">→</span>
+      </a>
+    </nav>
+    <div class="voet"><span class="muted" id="ontwerpen">Ontwerpen blijven in deze browser.</span>
+      <button class="stil" id="vergrendel" type="button">Vergrendelen</button></div>
+  </div>
+
+  <div class="kaart" id="leeg" hidden>
+    <p><b>Nog niet ingesteld.</b></p>
+    <p class="muted" style="margin-top:6px">Kies eerst een wachtwoord op de Mac:
+      <code>huis-tools/sync.sh init</code>, en zet daarna het huis erop met <code>huis-tools/sync.sh</code>.</p>
+  </div>
+
+  <div class="kaart" id="kapot" hidden>
+    <p><b>Deze browser kan het huis niet openen.</b></p>
+    <p class="muted" style="margin-top:6px" id="kapot-tekst"></p>
+  </div>
+</main>
+<script src="slot.js"></script>
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+// Alleen door naar een pagina van het huis zelf.
+const naar = (() => { const n = params.get('naar') || ''; return /^\/[\w\-/.]*$/.test(n) && n.startsWith(new URL('./', location.href).pathname) ? n : null; })();
+
+function kapot(tekst) { $('kapot').hidden = false; $('kapot-tekst').textContent = tekst; }
+
+async function sleutelInfo() {
+  const r = await fetch('sleutel.json', { cache: 'no-cache' });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error('sleutel.json gaf ' + r.status);
+  return r.json();
+}
+
+// Klopt een bewaarde sleutel nog bij het huidige wachtwoord?
+async function past(s, info) {
+  try { return new TextDecoder().decode(await HuisSlot.ontsleutel(s, HuisSlot.b64(info.controle), 'controle')) === 'huis'; }
+  catch (e) { return false; }
+}
+
+async function werker() {
+  const reg = await navigator.serviceWorker.register('sw.js', { scope: './', updateViaCache: 'none' });
+  await navigator.serviceWorker.ready;
+  reg.active?.postMessage('slot-gewijzigd');
+}
+
+async function open() {
+  await werker();
+  if (naar) { location.replace(naar); return; }
+  $('slot').hidden = true; $('menu').hidden = false;
+}
+
+async function start() {
+  if (!('serviceWorker' in navigator) || !window.crypto?.subtle || !window.indexedDB) {
+    kapot('Er is een moderne browser nodig met service workers (niet in een privévenster van sommige browsers).'); return;
+  }
+  let info;
+  try { info = await sleutelInfo(); } catch (e) { kapot(e.message); return; }
+  if (!info) { $('leeg').hidden = false; return; }
+  let s = null;
+  try { s = await HuisSlot.sleutels(); } catch (e) { kapot('Deze browser bewaart niets (privévenster?).'); return; }
+  if (s && await past(s, info)) { await open(); return; }
+  if (s) await HuisSlot.vergeet();
+  $('slot').hidden = false;
+  if (s || params.get('fout') === 'sleutel') { $('fout').hidden = false; $('fout').textContent = 'Het wachtwoord is veranderd. Vul het nieuwe in.'; }
+  $('wachtwoord').focus();
+  $('slot').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('open').disabled = true; $('open').textContent = 'Controleren…'; $('fout').hidden = true;
+    try {
+      const nieuw = await HuisSlot.uitWachtwoord($('wachtwoord').value, info);
+      if (!nieuw) { $('fout').hidden = false; $('fout').textContent = 'Dat wachtwoord klopt niet.'; $('wachtwoord').select(); return; }
+      await HuisSlot.bewaarSleutels(nieuw);
+      $('wachtwoord').value = '';
+      await open();
+    } catch (err) { $('fout').hidden = false; $('fout').textContent = err.message; }
+    finally { $('open').disabled = false; $('open').textContent = 'Openen'; }
+  });
+}
+
+$('vergrendel').addEventListener('click', async () => {
+  await HuisSlot.vergeet(); await HuisSlot.bewaarToken(null);
+  (await navigator.serviceWorker.getRegistration())?.active?.postMessage('slot-gewijzigd');
+  location.replace(location.pathname);
+});
+
+start();
+</script>
+</body>
+</html>
