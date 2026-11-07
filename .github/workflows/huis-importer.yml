@@ -1,0 +1,74 @@
+# De importpagina van vangenderingen.nl/huis/importeer/ start deze workflow voor elke zware stap (ophalen, opslaan,
+# kleiner maken, ...). Het verzoek is versleuteld; de uitvoer gaat versleuteld naar de tak huis-werk, niet in de log.
+# Uitleg: huis-tools/LEESMIJ.md
+name: Huis importer
+run-name: huis ${{ inputs.id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      id:
+        description: Verzoek-id (van de importpagina)
+        required: true
+        type: string
+      verzoek:
+        description: Versleuteld verzoek
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  actie:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HUIS_WERK: ${{ runner.temp }}/huis
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            huis
+            huis-tools
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sleutelbibliotheek
+        run: python -m pip install -q --disable-pip-version-check cryptography
+      - name: Importer-code uit de kluis
+        id: code
+        env:
+          HUIS_SLEUTEL: ${{ secrets.HUIS_SLEUTEL }}
+        run: python -I huis-tools/runner.py voorbereiden
+      - name: Omgeving uit de cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.huis-venv
+            ${{ steps.code.outputs.code }}/node_modules
+          key: huis-importer-${{ runner.os }}-${{ steps.code.outputs.hash }}
+      - name: Omgeving installeren
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: ${{ steps.code.outputs.code }}
+        run: |
+          python -m venv ~/.huis-venv
+          ~/.huis-venv/bin/pip install -q --disable-pip-version-check -r requirements.txt cryptography
+          npm ci --silent --no-audit --no-fund
+      - name: Actie uitvoeren
+        env:
+          HUIS_SLEUTEL: ${{ secrets.HUIS_SLEUTEL }}
+          HUIS_ID: ${{ inputs.id }}
+          HUIS_VERZOEK: ${{ inputs.verzoek }}
+          MESHY_API_KEY: ${{ secrets.MESHY_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ~/.huis-venv/bin/python -I huis-tools/runner.py uitvoeren
